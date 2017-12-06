@@ -26,8 +26,16 @@ namespace IntroToASPNETCore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc();
+            services.AddScoped<ITodoItemService, TodoItemService>();
+
+            //connection string for the Identity DB
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            //connection string for the ToDoDB
+            services.AddDbContext<ToDoContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("ToDoConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
