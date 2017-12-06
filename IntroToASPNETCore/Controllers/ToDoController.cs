@@ -33,5 +33,22 @@ namespace IntroToASPNETCore.Controllers
             // Pass the view to a model and render
             return View(model);
         }
+
+        public async Task<IActionResult> AddItem(NewTodoItem newItem)
+        {
+            if (!ModelState.IsValid) //if the model returns an error
+            {
+                //do stuff
+                return BadRequest(ModelState);
+            }
+            //check if the adding is successful (we still need to add AddItemAsync as it throws an error)
+            bool IsSuccessful = await _todoItemService.AddItemAsync(newItem);
+            if (!IsSuccessful) //if it fails
+            {
+                return BadRequest(new { error = "Could not add item" });
+            }
+            //otherwise, if it works return OK result
+            return Ok();
+        }
     }
 }

@@ -24,5 +24,21 @@ namespace IntroToASPNETCore.Services
             var items = await _context.Items.Where(x => x.IsDone == false).ToArrayAsync();
             return items;
         }
+
+        public async Task<bool> AddItemAsync(NewTodoItem newItem)
+        {
+            var entity = new TodoItem
+            {
+                Id = Guid.NewGuid(), //a random ID number
+                IsDone = false, //isDone is set to false (no tick in the checkbox)
+                Title = newItem.Title, //the new title goes in
+                DueAt = DateTimeOffset.Now.AddDays(3) //the date is set to 3 days in the future
+            };
+            _context.Items.Add(entity); //add all these fields to the entity
+
+            //save the changes to the database
+            var saveResult = await _context.SaveChangesAsync();
+            return saveResult == 1;
+        }
     }
 }
